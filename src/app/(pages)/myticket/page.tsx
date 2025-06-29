@@ -3,30 +3,18 @@
 import { useEffect, useState } from "react";
 import { createClient } from '../../../supabase/client';
 import { format } from 'date-fns';
-
-interface MyTicket {
-  id: number;
-  eventId: number;
-  ticketId: number;
-  types: string;
-  quantity: number;
-  userId: string;
-  status: string;
-  purchasedDate: string;
-  totalPrice: number;
-}
+import useGetAllTickets from "@/app/hooks/useGetAllTickets";
 
 export default function MyTicketsPage() {
-  const [tickets, setTickets] = useState<MyTicket[]>([]);
+  const { data, isLoading, error } = useGetAllTickets();
+  const tickets = data?.data ?? [];
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState('');
   const supabase = createClient();
 
   useEffect(() => {
     const fetchTickets = async () => {
       setLoading(true);
-      setError(null);
       try {
         // Ambil user email
         const { data } = await supabase.auth.getUser();
@@ -35,9 +23,7 @@ export default function MyTicketsPage() {
         const res = await fetch("/api/myticket");
         const json = await res.json();
         if (!res.ok) throw new Error(json.error || 'Gagal fetch tiket');
-        setTickets(json.data || []);
       } catch (err: any) {
-        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -47,7 +33,7 @@ export default function MyTicketsPage() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    window.location.href = '//login';
+    window.location.href = '/login';
   };
 
   return (
@@ -56,7 +42,7 @@ export default function MyTicketsPage() {
       <h1 className="text-2xl font-bold mb-4">Tiket Saya</h1>
       {userEmail && <div className="mb-4 text-green-700">Login sebagai: <b>{userEmail}</b></div>}
       {loading && <div>Loading...</div>}
-      {error && <div className="text-red-600">{error}</div>}
+      {error && <div className="text-red-600">{error.message}</div>}
       {!loading && !error && tickets.length === 0 && (
         <div className="text-gray-600">Belum ada tiket yang kamu pesan.</div>
       )}
@@ -70,8 +56,8 @@ export default function MyTicketsPage() {
               <div><b>Status:</b> {ticket.status}</div>
               <div>
                 <b>Tanggal Beli:</b>{" "}
-                {ticket.purchasedDate
-                  ? format(new Date(ticket.purchasedDate + 'T00:00:00'), 'dd MMMM yyyy')
+                {ticket.purchaseDate
+                  ? format(new Date(ticket.purchaseDate + 'T00:00:00'), 'dd MMMM yyyy')
                   : "-"}
               </div>
               <div><b>Total Harga:</b> Rp {ticket.totalPrice.toLocaleString()}</div>

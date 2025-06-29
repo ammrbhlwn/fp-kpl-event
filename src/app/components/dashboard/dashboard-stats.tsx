@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent } from "../../../components/ui/card"
+import { Card, CardContent } from "../../components/ui/card"
 import { Calendar, Ticket, Clock, TrendingUp } from "lucide-react"
 
 export function DashboardStats() {

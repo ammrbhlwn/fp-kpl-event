@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent } from "../../../components/ui/card"
+import { Card, CardContent } from "../../components/ui/card"
 import { Button } from "../ui/button"
-import { Badge } from "../../../components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../components/ui/tabs"
-import { useToast } from "@/hooks/use-toast"
+import { Badge } from "../../components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../components/ui/tabs"
 import { Calendar, MapPin, Ticket, X, Download, RefreshCw } from "lucide-react"
 import Image from "next/image"
+import { useToast } from "../../hooks/use-toast"
 
 export function MyBookingsList() {
   const [bookings, setBookings] = useState<any[]>([])

@@ -8,7 +8,7 @@ export async function bookTicket(input: BookTicketInput) {
     .from("ticket")
     .select("*")
     .eq("eventId", input.eventId)
-    .eq("types", input.ticketType)
+    .eq("types", input.types)
     .single();
 
   if (ticketError || !ticket) {
@@ -44,7 +44,7 @@ export async function bookTicket(input: BookTicketInput) {
     .insert({
       eventId: input.eventId,
       ticketId: ticket.id,
-      types: input.ticketType,
+      types: input.types,
       quantity: input.quantity,
       status: input.status ?? "active",
       purchasedDate: new Date().toISOString(),

@@ -12,6 +12,7 @@ import { useToast } from "../../hooks/use-toast"
 import { useBookingMutation } from "../../hooks/useBookingMutation"
 import useGetEventById from "../../hooks/useGetEventById"
 import { TicketType } from "../../Types"
+import { BookTicketInput } from "@/infrastructure/interface/bookTicketInput"
 
 export function BookingSection({ eventId }: { eventId: number }) {
   // const { data: event, isLoading } = useGetEventById(eventId)
@@ -80,31 +81,43 @@ export function BookingSection({ eventId }: { eventId: number }) {
       return
     }
 
-    bookingMutation.mutate(
-      {
-        eventId,
-        ticketType: selectedTicket.name as "Regular" | "VIP" | "VVIP",
-        quantity,
-        userId: "1",
-      } as any,
-      {
-        onSuccess: ({ data }) => {
-          toast({
-            title: "Booking created!",
-            description: "Redirecting to payment...",
-          })
-          router.push(`/payment/${data.id}`)
-        },
-        onError: (err: any) => {
-          toast({
-            title: "Booking failed",
-            description:
-              err?.response?.data?.error ?? "Something went wrong, please try again.",
-            variant: "destructive",
-          })
-        },
-      }
-    )
+    if (quantity > selectedTicket.available) {
+      toast({
+        title: "Quantity exceeded",
+        description: `Only ${selectedTicket.available} tickets left.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const payload: BookTicketInput = {
+      eventId,
+      userId: "",
+      types: selectedTicket.name as "Regular" | "VIP" | "VVIP",
+      quantity,
+      status: "active",
+      purchasedDate: new Date(),
+      totalPrice,
+    };
+
+    bookingMutation.mutate(payload, {
+      onSuccess: ({ data }) => {
+        toast({
+          title: "Booking created!",
+          description: "Redirecting to payment...",
+        });
+        router.push(`/payment/${data.id}`);
+      },
+      onError: (err: any) => {
+        toast({
+          title: "Booking failed",
+          description:
+            err?.response?.data?.error ??
+            "Something went wrong, please try again.",
+          variant: "destructive",
+        });
+      },
+    });
   }
 
   const getTicketBadgeColor = (ticketName: string) => {

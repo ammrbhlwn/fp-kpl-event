@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "../../../supabase/server";
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { bookTicketUseCase } from "../../use-cases/book-ticket";
+import { cookies } from "next/headers";
 
 export async function POST(req: NextRequest) {
-  const supabase = await createClient();
+  const cookieStore = cookies();
+  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+  
   const { data: { user } } = await supabase.auth.getUser();
 
+  console.log(user);
+  
   if (!user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

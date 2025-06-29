@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
 import { Button } from "../ui/button"
 import { Calendar, MapPin, Clock } from "lucide-react"
 import Image from "next/image"

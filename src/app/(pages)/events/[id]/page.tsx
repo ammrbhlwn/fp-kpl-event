@@ -4,7 +4,7 @@ import { BookingSection } from "../../../components/booking/booking-section"
 import { Footer } from "../../../components/layout/footer"
 
 interface Props {
-  params: { id: string }
+  params: { id: number }
 }
 
 export default function EventPage({ params }: Props) {

@@ -56,21 +56,8 @@ class ApiClient {
     return this.request(`/events/${id}`)
   }
 
-  // Booking endpoints
-  // async createBooking(eventId: string, ticketType: string, quantity: number) {
-  //   return this.request("/bookings", {
-  //     method: "POST",
-  //     body: JSON.stringify({ eventId, ticketType, quantity }),
-  //   })
-  // }
-
-  async createBooking({ eventId, ticketType, quantity }: BookTicketInput) {
-    const data = {
-      eventId,
-      ticketType,
-      quantity,
-    }
-    return this.request<{ data: any }>("/transaction", {
+  async createBooking(data: BookTicketInput) {
+    return this.request<{ data: any }>("/bookings", {
       method: "POST",
       body: JSON.stringify(data),
     })

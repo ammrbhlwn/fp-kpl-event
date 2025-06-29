@@ -7,7 +7,7 @@ import Image from "next/image"
 import useGetEventById from "../../hooks/useGetEventById"
 
 interface EventDetailsProps {
-  eventId: string
+  eventId: number
 }
 
 export function EventDetails({ eventId }: EventDetailsProps) {
