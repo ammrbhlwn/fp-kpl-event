@@ -1,0 +1,1 @@
+export type MyTicketStatus = "active" | "expired" | "canceled";

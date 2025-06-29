@@ -1,0 +1,1 @@
+export type TicketType = "Regular" | "VIP" | "VVIP"
